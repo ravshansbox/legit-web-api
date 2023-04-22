@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String  @id @db.Uuid
+  username        String  @unique
+  password_sha256 String
+  is_root         Boolean
+
+  companies Company[] @relation("companies__owner_id")
+
+  @@map("users")
+}
+
+model Company {
+  id       String @id @db.Uuid
+  owner_id String @db.Uuid
+  name     String @unique
+
+  owner User @relation("companies__owner_id", fields: [owner_id], references: [id])
+
+  products Product[] @relation("products__company_id")
+
+  @@map("companies")
+}
+
+model Product {
+  id         String @id @db.Uuid
+  name       String @unique
+  company_id String @db.Uuid
+
+  company Company @relation("products__company_id", fields: [company_id], references: [id])
+
+  product_codes ProductCode[] @relation("product_codes__product_id")
+
+  @@map("products")
+}
+
+model ProductCode {
+  id         String   @id @db.Uuid
+  created_at DateTime @db.Date
+  product_id String   @db.Uuid
+  code       String   @unique
+
+  product Product @relation("product_codes__product_id", fields: [product_id], references: [id])
+
+  @@map("product_codes")
+}

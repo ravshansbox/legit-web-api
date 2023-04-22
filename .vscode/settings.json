@@ -1,0 +1,5 @@
+{
+  "editor.codeActionsOnSave": ["source.fixAll", "source.organizeImports"],
+  "editor.formatOnSave": true,
+  "typescript.tsdk": "node_modules/typescript/lib"
+}

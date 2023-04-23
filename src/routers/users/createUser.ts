@@ -20,6 +20,7 @@ export const createUser: Route = {
     const newUser = await prismaClient.user.create({
       data: {
         id: v4(),
+        created_at: new Date(),
         is_root: false,
         password_sha256: sha256(body.password),
         username: body.username,

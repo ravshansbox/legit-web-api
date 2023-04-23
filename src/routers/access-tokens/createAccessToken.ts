@@ -23,10 +23,10 @@ export const createAccessToken: Route = {
       return;
     }
     const access_token = await prismaClient.accessToken.create({
-      data: { id: v4(), user_id: user.id },
+      data: { id: v4(), created_at: new Date(), user_id: user.id },
     });
     response
       .status(201)
-      .json({ access_token, user: skip(user, ['password_sha256']) });
+      .json({ ...access_token, user: skip(user, ['password_sha256']) });
   }),
 };

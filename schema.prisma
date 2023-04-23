@@ -8,8 +8,9 @@ datasource db {
 }
 
 model User {
-  id              String  @id @db.Uuid
-  username        String  @unique
+  id              String   @id @db.Uuid
+  created_at      DateTime @db.Date
+  username        String   @unique
   password_sha256 String
   is_root         Boolean
 
@@ -20,8 +21,9 @@ model User {
 }
 
 model AccessToken {
-  id      String @id @db.Uuid
-  user_id String @db.Uuid
+  id         String   @id @db.Uuid
+  created_at DateTime @db.Date
+  user_id    String   @db.Uuid
 
   user User @relation("access_tokens__user_id", fields: [user_id], references: [id])
 
@@ -29,9 +31,10 @@ model AccessToken {
 }
 
 model Company {
-  id       String @id @db.Uuid
-  owner_id String @db.Uuid
-  name     String @unique
+  id         String   @id @db.Uuid
+  created_at DateTime @db.Date
+  owner_id   String   @db.Uuid
+  name       String   @unique
 
   owner User @relation("companies__owner_id", fields: [owner_id], references: [id])
 
@@ -41,9 +44,10 @@ model Company {
 }
 
 model Product {
-  id         String @id @db.Uuid
-  name       String @unique
-  company_id String @db.Uuid
+  id         String   @id @db.Uuid
+  created_at DateTime @db.Date
+  name       String   @unique
+  company_id String   @db.Uuid
 
   company Company @relation("products__company_id", fields: [company_id], references: [id])
 

@@ -13,9 +13,19 @@ model User {
   password_sha256 String
   is_root         Boolean
 
-  companies Company[] @relation("companies__owner_id")
+  access_tokens AccessToken[] @relation("access_tokens__user_id")
+  companies     Company[]     @relation("companies__owner_id")
 
   @@map("users")
+}
+
+model AccessToken {
+  id      String @id @db.Uuid
+  user_id String @db.Uuid
+
+  user User @relation("access_tokens__user_id", fields: [user_id], references: [id])
+
+  @@map("access_tokens")
 }
 
 model Company {

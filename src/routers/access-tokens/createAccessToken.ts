@@ -1,23 +1,16 @@
-import { sign } from 'jsonwebtoken';
+import { v4 } from 'uuid';
 import { z } from 'zod';
 import { prismaClient } from '../../prismaClient';
-import {
-  ACCESS_TOKEN_SECRET,
-  REFRESH_TOKEN_SECRET,
-  Route,
-  createAsyncHandler,
-  sha256,
-  skip,
-} from '../../utils';
+import { Route, createAsyncHandler, sha256, skip } from '../../utils';
 
 const bodySchema = z.object({
   username: z.string(),
   password: z.string(),
 });
 
-export const createTokenPair: Route = {
+export const createAccessToken: Route = {
   method: 'post',
-  path: '/login',
+  path: '/',
   handler: createAsyncHandler(async (request, response) => {
     const { username, password } = bodySchema.parse(request.body);
     const user = await prismaClient.user.findUnique({ where: { username } });
@@ -29,13 +22,11 @@ export const createTokenPair: Route = {
       response.status(401).json({ message: 'Invalid password' });
       return;
     }
-    const tokenPayload = skip(user, ['password_sha256']);
-    const access_token = sign(tokenPayload, ACCESS_TOKEN_SECRET, {
-      expiresIn: '1d',
+    const access_token = await prismaClient.accessToken.create({
+      data: { id: v4(), user_id: user.id },
     });
-    const refresh_token = sign(tokenPayload, REFRESH_TOKEN_SECRET, {
-      expiresIn: '7d',
-    });
-    response.status(201).json({ access_token, refresh_token });
+    response
+      .status(201)
+      .json({ access_token, user: skip(user, ['password_sha256']) });
   }),
 };

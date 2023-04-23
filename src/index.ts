@@ -1,6 +1,6 @@
 import { app } from './app';
-import { PORT } from './utils';
+import { HTTP_PORT } from './utils';
 
-app.listen(PORT, () => {
-  console.info(`Listening on port ${PORT}`);
+app.listen(HTTP_PORT, () => {
+  console.info(`Listening on port ${HTTP_PORT}`);
 });

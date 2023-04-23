@@ -7,11 +7,7 @@ import {
 } from 'express';
 import { createHash } from 'node:crypto';
 
-export const {
-  PORT = '80',
-  ACCESS_TOKEN_SECRET = 'ACCESS_TOKEN_SECRET',
-  REFRESH_TOKEN_SECRET = 'REFRESH_TOKEN_SECRET',
-} = process.env;
+export const { HTTP_PORT = '80' } = process.env;
 
 type AsyncRequestHandler = (
   request: Request,

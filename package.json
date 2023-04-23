@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build": "tsc --outDir dist",
+    "migrate": "prisma db push",
     "start": "nodemon src"
   },
   "dependencies": {

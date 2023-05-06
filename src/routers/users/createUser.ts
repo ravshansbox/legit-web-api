@@ -1,6 +1,7 @@
 import { ok } from 'assert';
 import { v4 } from 'uuid';
 import { z } from 'zod';
+import { HttpError } from '../../common/HttpError';
 import { parseAccessToken } from '../../common/parseAccessToken';
 import { prismaClient } from '../../prismaClient';
 import { Route, createAsyncHandler, sha256, skip } from '../../utils';
@@ -15,7 +16,7 @@ export const createUser: Route = {
   path: '/',
   handler: createAsyncHandler(async (request, response) => {
     const { user } = await parseAccessToken(request);
-    ok(user.is_root, 'Root access is required');
+    ok(user.is_root, new HttpError('Root access is required', 403));
     const body = bodySchema.parse(request.body);
     const newUser = await prismaClient.user.create({
       data: {

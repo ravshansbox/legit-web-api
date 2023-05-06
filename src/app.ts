@@ -10,6 +10,11 @@ export const app = express();
 
 app.use(json({ limit: '1mb' }));
 
+app.use((request, _response, next) => {
+  console.info(request.method, request.url);
+  next();
+});
+
 registerRoute(app, accessTokenRoute);
 registerRoute(app, userRoute);
 

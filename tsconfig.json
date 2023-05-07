@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "esModuleInterop": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
     "rootDir": ".",
-    "strict": true
+    "strict": true,
+    "target": "esnext"
   }
 }

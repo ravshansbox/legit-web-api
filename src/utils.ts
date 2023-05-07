@@ -18,8 +18,12 @@ type AsyncRequestHandler = (
 export const createAsyncHandler = (
   handler: AsyncRequestHandler
 ): RequestHandler => {
-  return (request, response, next) => {
-    handler(request, response, next).catch(next);
+  return async (request, response, next) => {
+    try {
+      await handler(request, response, next);
+    } catch (error) {
+      next(error);
+    }
   };
 };
 

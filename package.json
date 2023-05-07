@@ -31,7 +31,7 @@
     "events": {
       "start": "clear"
     },
-    "exec": "node -r dotenv/config -r ts-node/register",
+    "exec": "node --inspect --require dotenv/config --require ts-node/register",
     "ext": "ts",
     "watch": [
       "src",

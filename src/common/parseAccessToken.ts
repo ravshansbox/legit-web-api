@@ -1,5 +1,5 @@
 import type { IncomingMessage } from 'node:http';
-import { prismaClient } from '../prismaClient';
+import { fetchAccessToken } from '../services/fetchAccessToken';
 import { HttpError } from './HttpError';
 
 export const parseAccessToken = async (request: IncomingMessage) => {
@@ -12,12 +12,9 @@ export const parseAccessToken = async (request: IncomingMessage) => {
     throw new HttpError('Invalid Authorization header', 403);
   }
   const accessTokenId = result[1];
-  const accessToken = await prismaClient.accessToken.findUnique({
-    include: { user: { select: { id: true, username: true, is_root: true } } },
-    where: { id: accessTokenId },
-  });
-  if (accessToken === null) {
+  try {
+    return await fetchAccessToken(accessTokenId);
+  } catch (error) {
     throw new HttpError('Invalid Access Token ID', 403);
   }
-  return accessToken;
 };
